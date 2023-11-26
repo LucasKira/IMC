@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMC</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #141e30, #243b55);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .margem {
+            background: linear-gradient(to bottom right, #005c97, #363795);
+            max-width: 100%;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            transition: background 0.3s ease;
+            animation: fadeIn 1s ease;
+        }
+
+        .margem:hover {
+            background: linear-gradient(to bottom right, #1b2735, #4b79a1);
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input {
+            display: block;
+            width: 80%;
+            padding: 10px;
+            margin: 10px auto;
+            border: 1px solid #00c3ff;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        input:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: #00c3ff;
+        }
+
+        .botao {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px auto;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .botao:hover {
+            background-color: #45a049;
+        }
+
+        .resultado {
+            color: #fff;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .tabela {
+            background: linear-gradient(to bottom right, #005c97, #363795);
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            max-height: 470px;
+            margin-top: 20px;
+            font-size: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
+            animation: slideInUp 1s ease;
+        }
+
+        .tabela:hover {
+            background: linear-gradient(to bottom right, #1b2735, #4b79a1);
+        }
+
+        .paragrafo {
+            margin: 5px;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .paragrafo:hover {
+            background-color: #ffc107;
+            transform: scale(1.05);
+        }
+
+        .paragrafo-flash {
+            animation: flash 1s infinite alternate;
+        }
+
+        @keyframes flash {
+            from {
+                background-color: yellow;
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            }
+            to {
+                background-color: inherit;
+                box-shadow: none;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(20px);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="margem">
+        <div class="container">
+            <p style="font-size: 24px; font-weight: bold;">CÁLCULO IMC</p>
+            <p>Nome</p>
+            <input type="text" class="nome">
+            <p>Altura</p>
+            <input type="number" class="altura">
+            <p>Peso</p>
+            <input type="number" class="peso">
+            <p></p>
+            <button class="botao" onclick="result()">CALCULAR</button>
+            <div class="resultado">Resultado</div>
+        </div>
+    </div>
+
+    <div class="tabela">
+        <h1>Tabela </h1>
+        <p class="paragrafo" id="p1" onclick="highlightParagraph('p1')">Menor que 16 – Magreza grave </p>
+        <p class="paragrafo" id="p2" onclick="highlightParagraph('p2')">16 a menor que 17 – Magreza moderada</p>
+        <p class="paragrafo" id="p3" onclick="highlightParagraph('p3')">17 a menor que 18,5 – Magreza leve</p>
+        <p class="paragrafo" id="p4" onclick="highlightParagraph('p4')">18,5 a menor que 25 – Saudável</p>
+        <p class="paragrafo" id="p5" onclick="highlightParagraph('p5')">25 a menor que 30 – Sobrepeso</p>
+        <p class="paragrafo" id="p6" onclick="highlightParagraph('p6')">30 a menor que 35 – Obesidade Grau I</p>
+        <p class="paragrafo" id="p7" onclick="highlightParagraph('p7')">35 a menor que 40 – Obesidade Grau II (considerada severa)</p>
+        <p class="paragrafo" id="p8" onclick="highlightParagraph('p8')">Maior que 40 – Obesidade Grau III (considerada mórbida</p>
+    </div>
+
+    <script>
+        const altura = document.querySelector('.altura');
+        const peso = document.querySelector('.peso');
+        const nome = document.querySelector('.nome');
+        const resultado = document.querySelector('.resultado');
+
+        function result() {
+            const alturaValor = parseFloat(altura.value).toFixed(2) / 100;
+            const pesoValor = parseFloat(peso.value);
+            const calcFinal = pesoValor / (alturaValor * alturaValor);
+            resultado.innerHTML = calcFinal.toFixed(2);
+
+            if (calcFinal < 16) {
+                highlightParagraph('p1');
+            } else if (calcFinal >= 16 && calcFinal < 17) {
+                highlightParagraph('p2');
+            } else if (calcFinal >= 17 && calcFinal < 18.5) {
+                highlightParagraph('p3');
+            } else if (calcFinal >= 18.5 && calcFinal < 25) {
+                highlightParagraph('p4');
+            } else if (calcFinal >= 25 && calcFinal < 30) {
+                highlightParagraph('p5');
+            } else if (calcFinal >= 30 && calcFinal < 35) {
+                highlightParagraph('p6');
+            } else if (calcFinal >= 35 && calcFinal < 40) {
+                highlightParagraph('p7');
+            } else if (calcFinal >= 40) {
+                highlightParagraph('p8');
+            }
+        }
+
+        function highlightParagraph(paragraphId) {
+            const highlightedParagraph = document.querySelector(`#${paragraphId}`);
+            highlightedParagraph.classList.add('paragrafo-flash');
+
+            // Restaura a animação após 1 segundo (ajuste conforme necessário)
+            setTimeout(() => {
+                highlightedParagraph.classList.remove('paragrafo-flash');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
